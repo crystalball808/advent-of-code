@@ -74,9 +74,9 @@ fn find_folder_by_location_mut<'a>(
         }
     }
 
-    return Err(ChildFolderDoesNotExist {
+    Err(ChildFolderDoesNotExist {
         folder_name: next_folder_name.to_owned(),
-    });
+    })
 }
 
 pub fn get_file_system(log: String) -> Result<Folder, &'static str> {
@@ -91,7 +91,7 @@ pub fn get_file_system(log: String) -> Result<Folder, &'static str> {
     let mut is_listing = false;
     for line in log.lines() {
         let statements: Vec<&str> = line.split(" ").collect();
-        match *statements.get(0).expect(CORRUPTED_FILE_MESSAGE) {
+        match *statements.first().expect(CORRUPTED_FILE_MESSAGE) {
             "$" => {
                 // input
                 match *statements.get(1).expect(CORRUPTED_FILE_MESSAGE) {
@@ -149,14 +149,14 @@ pub fn get_file_system(log: String) -> Result<Folder, &'static str> {
         }
     }
 
-    return Ok(result);
+    Ok(result)
 }
 
 pub fn first_part(root_folder: Folder) -> u32 {
     let folder_sizes = get_folder_sizes(&root_folder);
     dbg!(&folder_sizes);
 
-    return folder_sizes.iter().sum();
+    folder_sizes.iter().sum()
 }
 
 fn get_folder_sizes(folder: &Folder) -> Vec<u32> {
@@ -186,5 +186,5 @@ fn get_folder_sizes(folder: &Folder) -> Vec<u32> {
         current_folders_sizes.push(total_size_this_folder);
     }
 
-    return current_folders_sizes;
+    current_folders_sizes
 }
